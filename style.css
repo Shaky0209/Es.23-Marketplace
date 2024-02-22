@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Anta&display=swap');
+body{
+    font-family: Anta;
+    background-color: lightgray;
+}
+
+.detailsContain, .manageContain{
+    height: 90vh;
+}
+
+.nav-link{
+    color: white;
+    list-style: none;
+}
+
+.nav-link:hover{
+    color: rgb(106, 177, 0);
+    text-shadow: 2px 2px 1px red;
+    cursor: pointer;
+}
+
+.site-name{
+
+    
+    position: relative;
+    top: -5px;
+    color: green;
+    text-shadow: 2px 2px 1px rgb(255, 124, 124);
+    font-size: 27px;
+    font-weight: 600;
+    z-index: 0;
+}
+
+.upper{
+    position: relative;
+    top: 10px;
+    margin-left: -50px;
+    color: white;
+    z-index: 1;
+}
+
+.objCard{
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 5px 5px 10px #333333;
+}
+
+.img.w-100{
+    border-radius: 10px;
+}
+
+td{
+    color: blue;
+    text-align: center;
+}
+
+footer{
+    height: 200px;
+    margin-top: 200px;
+    font-size: 9pt;
+    color: rgb(190, 226, 255);
+    background-color: black;
+}
