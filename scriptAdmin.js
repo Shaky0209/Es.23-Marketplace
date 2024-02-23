@@ -1,4 +1,6 @@
 const node = document.querySelector(".tab-node");
+const searchBar = document.querySelector(".search");
+const searchParam = document.querySelector("#search-param");
 let json;
 
 const fetchFnc = async () => {
@@ -21,19 +23,18 @@ const editFnc = (event) => {
 
 const deleteFnc = async (event)=>{
     let id = event.target.querySelector(".id").innerText;
-    console.log(event.target.parentNode);
-    console.log(id);
     try {
         await fetch(`https://striveschool-api.herokuapp.com/api/product/${id}`,
         {method:"DELETE", headers:{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA"}});
     } catch (error) {
         console.log(error);
     }
-    const rowDelete = document.getElementsByClassName(`${id}`);
-    rowDelete[0].remove();
+    fetchFnc();
 }
 
 const getOnPage = (obj) => {
+    node.innerHTML = "";
+
     let firstRow = document.createElement("tr");
     firstRow.style.textAlign = "center";
     firstRow.classList.add("bg-primary");
@@ -77,6 +78,7 @@ const getOnPage = (obj) => {
 
     let tab7 = document.createElement("td");
     tab7.style.border = "1px solid white";
+    tab7.style.width ="90px";
     firstRow.appendChild(tab7);
 
     let count = 1;
@@ -181,5 +183,47 @@ const getOnPage = (obj) => {
         count++
     });
 }
+
+const searchFnc = async (event)=>{
+    let typeSearch = searchParam.value;
+    let inputSearch = event.target.value.toLowerCase();
+    let array;
+    
+    try{
+        let response = await fetch(`https://striveschool-api.herokuapp.com/api/product/`,
+        {headers:{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA"}});
+        let json = await response.json();
+    }catch{
+        console.log(error);
+    }
+
+    switch(typeSearch){
+        case typeSearch = "brand":
+            array = json.filter((element)=>{
+                return element.brand.toLowerCase().includes(inputSearch);
+            });
+            node.innerHTML = "";
+            getOnPage(array);
+            break
+
+        case typeSearch = "description":
+            array = json.filter((element)=>{
+                return element.description.toLowerCase().includes(inputSearch);
+            });
+            node.innerHTML = "";
+            getOnPage(array)
+            break
+        case typeSearch = "name":
+            array = json.filter((element)=>{
+                return element.name.toLowerCase().includes(inputSearch);
+            });
+            node.innerHTML = "";
+            getOnPage(array)
+            break
+    }
+};
+
+
+searchBar.addEventListener("keyup", searchFnc);
 
 fetchFnc();

@@ -14,7 +14,7 @@
     <div class="collapse" id="navbarToggleExternalContent">
         <div class="bg-dark p-2">
             <ul class="ps-0">
-                <li><a class="nav-link home" type="button" onclick="home()">Home</a></li>
+                <li><a class="nav-link home" type="button" href="index.html">Home</a></li>
                 <li><a class="nav-link add-product" type="button" href="admin.html">Admin</a></li>
                 <li><a class="nav-link add-product" type="button" onclick="addProduct()">Add Product</a></li>
             </ul>
@@ -36,8 +36,16 @@
     </nav>
     <div class="container-fluid">
         <div class="row d-flex justify-content-center">
-            <div class="col-11 d-flex justify-content-end px-0">
-                <button class="btn btn-primary mt-3" type="button" onclick="addProduct()">Add Product</button>
+            <div class="col-11 row d-flex justify-content-end px-0">
+                <select class="col-2" name="search-param" id="search-param">
+                    <option value="brand">Brand</option>
+                    <option value="description">Description</option>
+                    <option value="name">Name</option>
+                </select>
+                <div class="col-8">
+                    <input class="search" type="search" placeholder="Search">
+                </div>
+                <button class="btn btn-primary add col-1 offset-1 mx-0" type="button" onclick="addProduct()">Add Product</button>
             </div>
         </div>
         <div class="row d-flex justify-content-center">
