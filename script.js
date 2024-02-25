@@ -12,13 +12,19 @@ const fetchFnc = async () => {
     getOnPage(json);
 }
 
-const getOnPage = (obj) => {
-    obj.forEach(element => {
+const getOnPage = (json) =>{
+    elementsMap(json);
+    output.forEach(element => {
+        node.appendChild(element);
+    });
+}
+
+const elementsMap = (obj) => {
+    return output = obj.map((element) => {
         let side = document.createElement("div");
         side.classList.add("col-sm-6", "col-md-4", "col-lg-3", "wh-100");
         side.style.padding = "10px";
         side.style.backgroundColor = "lightgray";
-        node.appendChild(side);
 
         let sideContent = document.createElement("div");
         sideContent.classList.add("d-flex", "flex-column", "justify-content-between", "h-100");
@@ -89,7 +95,8 @@ const getOnPage = (obj) => {
         idDetails.classList.add("id", "d-none");
         idDetails.innerText = element._id;
         detailsBtn.appendChild(idDetails);
-        
+
+        return side;
     });
 }
 
@@ -99,13 +106,4 @@ const detailsFnc = (event) => {
     window.location.href = `${url}?id=${objId}`;
 }
 
-
-
 fetchFnc();
-
-// imageUrl:
-// brand:
-// name:
-// description:
-// price:
-// _id:

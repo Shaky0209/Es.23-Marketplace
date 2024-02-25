@@ -21,12 +21,8 @@ const backgroundRed = () => {
     msg.style.color = "red";
 }
 
-const applyObj = (event) => {
-    let brand = document.querySelector(".brand");
-    let description = document.querySelector(".description");
-    let image = document.querySelector(".img");
-    let name = document.querySelector(".name");
-    let price = document.querySelector(".price");
+const applyObj = () => {
+
     let closeBtn = document.querySelector(".closeBtn");
     closeBtn.addEventListener("click", () => { msgDisp.classList.add("d-none"); });
 
@@ -40,7 +36,7 @@ const applyObj = (event) => {
     } else if (!(image.value.includes("https://") && image.value.includes("."))) {
         msg.innerText = 'The "image URL" field must respect the URL format';
         autClose()
-    } else if (!(name.value.length > 1)) {
+    } else if (!(nameObj.value.length > 1)) {
         msg.innerText = 'Fill in the "Object Name" field with at least 2 characters';
         autClose();
 
@@ -53,7 +49,7 @@ const applyObj = (event) => {
             brand: `${brand.value}`,
             description: `${description.value}`,
             imageUrl: `${image.value}`,
-            name: `${name.value}`,
+            name: `${nameObj.value}`,
             price: `${price.value}`,
         }
 
@@ -61,7 +57,7 @@ const applyObj = (event) => {
             brand.value = "";
             description.value = "";
             image.value = "";
-            name.value = "";
+            nameObj.value = "";
             price.value = "";
             sendFetch(newObj);
         } else if (act === edit) {
@@ -85,7 +81,6 @@ const correctlyFnc = () => {
     setTimeout(() => {
         msgDisp.classList.add("d-none");
     }, 6000);
-
 }
 
 const sendFetch = async (obj) => {
@@ -118,8 +113,7 @@ const editFetch = async (obj) => {
             alert("The edit operation does'nt succesfull! Read code's error on console.");
         }
     } catch (error) {
-        console.log("error = " + error);
-
+        console.log(error);
     }
 }
 
@@ -193,32 +187,23 @@ const formBuild = () => {
 };
 
 const inputValue = async (id) => {
-
     try {
-        let brand = document.getElementsByClassName("brand");
-        let description = document.getElementsByClassName("description");
-        let image = document.getElementsByClassName("img");
-        let name = document.getElementsByClassName("name");
-        let price = document.getElementsByClassName("price");
         let json;
         let response = await fetch(`https://striveschool-api.herokuapp.com/api/product/${id}`,
             {
                 method: "GET",
                 headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA" }
             });
-
         json = await response.json();
 
-        brand[0].value = json.brand;
-        description[0].value = json.description;
-        image[0].value = json.imageUrl;
-        name[0].value = json.name;
-        price[0].value = json.price;
+        brand.value = json.brand;
+        description.value = json.description;
+        image.value = json.imageUrl;
+        nameObj.value = json.name;
+        price.value = json.price;
     } catch (error) {
         console.log(error);
     }
-
-
 }
 
 if (act === "edit%product") {
@@ -226,3 +211,8 @@ if (act === "edit%product") {
 }
 
 formBuild();
+const brand = document.querySelector(".brand");
+const description = document.querySelector(".description");
+const image = document.querySelector(".img");
+const nameObj = document.querySelector(".name");
+const price = document.querySelector(".price");

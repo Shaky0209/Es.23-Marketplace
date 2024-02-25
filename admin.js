@@ -7,9 +7,8 @@ const pass = document.querySelector(".login-password");
 const submitBtn = document.querySelector(".submitBtn");
 const logErrDisp = document.querySelector(".login-err");
 const logErrMsg = document.querySelector(".logErr-msg");
-
 let json;
-
+alert("For LogIn => UserName : Master, Password: 5678.");
 const errDispFnc = () => {
     logErrDisp.classList.remove("d-none");
     nameLog.value = "";
@@ -39,7 +38,7 @@ const addProduct = () => {
 };
 
 const fetchFnc = async () => {
-    alert("For LogIn => UserName : Master, Password: 5678.")
+    let json;
     try {
         const response = await fetch(`https://striveschool-api.herokuapp.com/api/product/`,
             { headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA" } });
@@ -251,12 +250,13 @@ const getOnPage = (obj) => {
 const searchFnc = async (event) => {
     let typeSearch = searchParam.value;
     let inputSearch = event.target.value.toLowerCase();
+    let json;
     let array;
 
     try {
         let response = await fetch(`https://striveschool-api.herokuapp.com/api/product/`,
             { headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA" } });
-        let json = await response.json();
+        json = await response.json();
     } catch {
         console.log(error);
     }
