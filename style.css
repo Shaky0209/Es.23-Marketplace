@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Anta&display=swap');
+
 body{
+    position: relative;
     font-family: Anta;
     background-color: lightgray;
 }
@@ -20,8 +22,6 @@ body{
 }
 
 .site-name{
-
-    
     position: relative;
     top: -5px;
     color: green;
@@ -70,6 +70,80 @@ body{
 #search-param{
     height: 30px;
     margin-top: 20px;
+}
+
+.popUp-delete{
+    height: 200px;
+    width: 50vw;
+    position: fixed;
+    top: calc((100vh - 200px) * 0.2);
+    left: 25vw;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.error-message{
+    position: fixed;
+    top: calc((100% - 100px)/2);
+    left: 18vw;
+    height: 150px;
+    width: 64vw;
+    background-color: lightcoral;
+    border-radius: 10px;
+    border: 3px solid red;
+}
+
+.closeBtn{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.msg{
+    font-size: 16pt;
+    font-weight: bold;
+    color: red;
+}
+
+
+.login-page{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    z-index: 100;
+}
+
+.login-set{
+    height: 280px;
+    width: 280px;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+.login-err{
+    position: absolute;
+    top: 40px;
+    left: calc((100vw - 280px)/2);
+    height: 80px;
+    width: 280px;
+    padding: 15px;
+    color: red;
+    background-color: lightcoral;
+    border: 3px solid red;
+    border-radius: 10px;
+}
+
+.submitBtn{
+    color: white;
+    background-color: black;
+    border: 1px solid white;
+    border-radius: 5px;
 }
 
 td{

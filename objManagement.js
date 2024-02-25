@@ -1,37 +1,91 @@
 const node = document.querySelector(".manageContain");
+const msg = document.querySelector(".msg");
+const msgDisp = document.querySelector(".error-message");
 const params = new URLSearchParams(location.search);
 const id = params.get("id");
 const act = params.get("act");
 const send = "send%product";
 const edit = "edit%product";
 
-const applyObj = () => {
+const autClose = () => {
+    msgDisp.classList.remove("d-none");
+    setTimeout(() => {
+        msgDisp.classList.add("d-none");
+    }, 6000);
+    backgroundRed();
+}
 
+const backgroundRed = () => {
+    msgDisp.style.backgroundColor = "lightcoral";
+    msgDisp.style.border = "3px solid red";
+    msg.style.color = "red";
+}
+
+const applyObj = (event) => {
     let brand = document.querySelector(".brand");
     let description = document.querySelector(".description");
     let image = document.querySelector(".img");
     let name = document.querySelector(".name");
     let price = document.querySelector(".price");
+    let closeBtn = document.querySelector(".closeBtn");
+    closeBtn.addEventListener("click", () => { msgDisp.classList.add("d-none"); });
 
-    let newObj = {
-        brand: `${brand.value}`,
-        description: `${description.value}`,
-        imageUrl: `${image.value}`,
-        name: `${name.value}`,
-        price: `${price.value}`,
+    if (!(brand.value.length > 1)) {
+        msg.innerText = 'Fill in the "brand" field with at least 2 characters';
+        autClose();
+    } else if (!(description.value.length > 5)) {
+        msg.innerText = 'Fill in the "description" field with at least 6 characters';
+
+        autClose();
+    } else if (!(image.value.includes("https://") && image.value.includes("."))) {
+        msg.innerText = 'The "image URL" field must respect the URL format';
+        autClose()
+    } else if (!(name.value.length > 1)) {
+        msg.innerText = 'Fill in the "Object Name" field with at least 2 characters';
+        autClose();
+
+    } else if (!(!(price.value == 0) && !((price.value / 2) === NaN) && !(price.value === ""))) {
+        msg.innerText = 'The "price" field must respect the valid numeric format ';
+        msgDisp.classList.remove("d-none");
+        autClose();
+    } else {
+        let newObj = {
+            brand: `${brand.value}`,
+            description: `${description.value}`,
+            imageUrl: `${image.value}`,
+            name: `${name.value}`,
+            price: `${price.value}`,
+        }
+
+        if (act === send) {
+            brand.value = "";
+            description.value = "";
+            image.value = "";
+            name.value = "";
+            price.value = "";
+            sendFetch(newObj);
+        } else if (act === edit) {
+            editFetch(newObj);
+        }
+    }
+}
+
+const correctlyFnc = () => {
+    msgDisp.style.backgroundColor = "lightgreen";
+    msgDisp.style.border = "3px solid green";
+    msg.style.color = "green";
+    if (act === send) {
+        msg.innerText = "Your Object has been correctly added"
     }
 
-    if(act === send){
-        brand.value = "";
-        description.value = "";
-        image.value = "";
-        name.value = "";
-        price.value = "";
-        sendFetch(newObj);
-    }else if(act === edit){
-        editFetch(newObj);
-        
+    if (act === edit) {
+        msg.innerText = "Your Object has been correctly edited";
     }
+    msgDisp.classList.remove("d-none");
+    setTimeout(() => {
+        msgDisp.classList.add("d-none");
+    }, 6000);
+
 }
 
 const sendFetch = async (obj) => {
@@ -41,8 +95,10 @@ const sendFetch = async (obj) => {
                 method: "POST", body: JSON.stringify(obj),
                 headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA", "Content-type": "application/json;charset=UTF-8" }
             });
-        if(response){
-            alert("Your Object has been correctly added");
+        if (response.status === 200) {
+            correctlyFnc();
+        } else {
+            alert("The edit operation does'nt succesfull! Read code's error on console.");
         }
     } catch (error) {
         console.log(error);
@@ -50,20 +106,20 @@ const sendFetch = async (obj) => {
 }
 
 const editFetch = async (obj) => {
-    
     try {
-        const response = await fetch(`https://striveschool-api.herokuapp.com/api/product/${id}`,
+        let response = await fetch(`https://striveschool-api.herokuapp.com/api/product/${id}`,
             {
                 method: "PUT", body: JSON.stringify(obj),
                 headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA", "Content-type": "application/json;charset=UTF-8" }
             });
-        if(response){
-            alert("Your Object has been correctly edited");
+        if (response.status === 200) {
+            correctlyFnc();
+        } else {
+            alert("The edit operation does'nt succesfull! Read code's error on console.");
         }
     } catch (error) {
-        if(error){
-            console.log(error);
-        }
+        console.log("error = " + error);
+
     }
 }
 
@@ -72,7 +128,7 @@ const formBuild = () => {
     formContent.classList.add("col-8", "d-flex", "flex-column", "align-items-center", "pb-5");
     formContent.style.boxShadow = "5px 5px 10px #333333";
     if (act === send) {
-        formContent.style.backgroundColor = "lightgreen";
+        formContent.style.backgroundColor = "lightblue";
     } else if (act === edit) {
         formContent.style.backgroundColor = "lightcoral";
     }
@@ -93,6 +149,7 @@ const formBuild = () => {
     inBrand.classList.add("brand", "text-center", "my-2");
     inBrand.style.width = "90%";
     inBrand.placeholder = "Insert Brand";
+    inBrand.type = "text";
     formContent.appendChild(inBrand);
 
     let inDescription = document.createElement("input");
@@ -120,25 +177,23 @@ const formBuild = () => {
     formContent.appendChild(inPrice);
 
     let actBtn = document.createElement("button");
-    actBtn.classList.add("px-2", "py-1","mt-3");
+    actBtn.classList.add("px-2", "py-1", "mt-3");
     actBtn.style.border = "none";
     actBtn.style.borderRadius = "10px";
     actBtn.style.backgroundColor = "black";
     actBtn.style.color = "white";
     actBtn.style.boxShadow = "3px 3px 2px #555555"
-    actBtn.addEventListener("click", applyObj);
-    if(act === send){
+    actBtn.addEventListener("click", (event) => { applyObj(event) });
+    if (act === send) {
         actBtn.innerText = "Send";
-    }else if(act === edit){
+    } else if (act === edit) {
         actBtn.innerText = "Edit";
     }
     formContent.appendChild(actBtn);
 };
 
-
-
 const inputValue = async (id) => {
-    
+
     try {
         let brand = document.getElementsByClassName("brand");
         let description = document.getElementsByClassName("description");

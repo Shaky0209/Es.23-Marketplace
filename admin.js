@@ -1,12 +1,48 @@
 const node = document.querySelector(".tab-node");
 const searchBar = document.querySelector(".search");
 const searchParam = document.querySelector("#search-param");
+const loginPage = document.querySelector(".login-page");
+const nameLog = document.querySelector(".login-name");
+const pass = document.querySelector(".login-password");
+const submitBtn = document.querySelector(".submitBtn");
+const logErrDisp = document.querySelector(".login-err");
+const logErrMsg = document.querySelector(".logErr-msg");
+
 let json;
 
+const errDispFnc = () => {
+    logErrDisp.classList.remove("d-none");
+    nameLog.value = "";
+    pass.value = "";
+    setTimeout(()=>{
+        logErrDisp.classList.add("d-none");
+    }, 4000);
+}
+
+const logFnc = () => {
+    
+    if (nameLog.value === "Master" && pass.value == "5678") {
+        loginPage.classList.add("d-none");
+        nameLog.value = "";
+        pass.value = "";
+    } else if (!(nameLog.value === "Master")) {
+        logErrMsg.innerText = "The User Name you entered is incorrect";
+        errDispFnc();
+    } else if (!(pass.value == "5678")) {
+        logErrMsg.innerText = "The Password you entered is incorrect";
+        errDispFnc();
+    }
+}
+
+const addProduct = () => {
+    window.location.href = "objManagement.html?act=send%product";
+};
+
 const fetchFnc = async () => {
+    alert("For LogIn => UserName : Master, Password: 5678.")
     try {
         const response = await fetch(`https://striveschool-api.herokuapp.com/api/product/`,
-        {headers:{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA"}});
+            { headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA" } });
         json = await response.json();
     } catch (error) {
         console.log(error);
@@ -21,15 +57,36 @@ const editFnc = (event) => {
     window.location.href = `${url}?id=${id}&act=${act}`;
 };
 
-const deleteFnc = async (event)=>{
-    let id = event.target.querySelector(".id").innerText;
+const deleteFnc = async (event) => {
     try {
+        let id = event.target.querySelector(".id").innerText;
         await fetch(`https://striveschool-api.herokuapp.com/api/product/${id}`,
-        {method:"DELETE", headers:{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA"}});
+            { method: "DELETE", headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA" } });
     } catch (error) {
         console.log(error);
     }
     fetchFnc();
+}
+
+const popUpDelete = (event) => {
+    let id;
+    id = event.target.querySelector(".id").innerText;
+    let popUp = document.querySelector(".popUp-delete");
+    popUp.classList.remove("d-none");
+
+    let yesBtn = document.querySelector(".yesBtn");
+    let newId = document.createElement("span");
+    newId.classList.add("id", "d-none");
+    newId.innerText = id;
+    yesBtn.appendChild(newId);
+    yesBtn.addEventListener("click", (event) => {
+        deleteFnc(event)
+        newId.remove();
+        popUp.classList.add("d-none");
+    });
+
+    let noBtn = document.querySelector(".noBtn");
+    noBtn.addEventListener("click", () => { popUp.classList.add("d-none") });
 }
 
 const getOnPage = (obj) => {
@@ -63,7 +120,7 @@ const getOnPage = (obj) => {
     tab4.classList.add("text-white");
     tab4.innerText = "Name";
     firstRow.appendChild(tab4);
-    
+
     let tab5 = document.createElement("td");
     tab5.style.border = "1px solid white";
     tab5.classList.add("text-white");
@@ -78,7 +135,7 @@ const getOnPage = (obj) => {
 
     let tab7 = document.createElement("td");
     tab7.style.border = "1px solid white";
-    tab7.style.width ="90px";
+    tab7.style.minWidth = "90px";
     firstRow.appendChild(tab7);
 
     let count = 1;
@@ -86,9 +143,9 @@ const getOnPage = (obj) => {
 
         let row = document.createElement("tr");
         row.classList.add(`${element._id}`);
-        if(count%2 === 1){
+        if (count % 2 === 1) {
             row.style.backgroundColor = "rgb(190, 226, 255)";
-        }else{
+        } else {
             row.style.backgroundColor = "rgb(149, 206, 254)";
         }
         node.appendChild(row);
@@ -131,40 +188,47 @@ const getOnPage = (obj) => {
         let cell7 = document.createElement("td");
         cell7.classList.add("d-flex", "justify-content-center");
         cell7.style.position = "relative";
-        cell7.style.width = "70px";
+        cell7.style.minWidth = "90px";
         row.appendChild(cell7);
 
         let editBtn = document.createElement("button");
-        editBtn.style.backgroundColor ="#C8A000";
-        editBtn.style.borderRadius ="7px";
+        editBtn.type = "button";
+        editBtn.classList.add("d-flex", "justify-content-center", "align-items-center");
+        editBtn.style.width = "30px";
+        editBtn.style.height = "30px";
+        editBtn.style.backgroundColor = "#C8A000";
+        editBtn.style.color = "black";
+        editBtn.style.textDecoration = "none";
+        editBtn.style.borderRadius = "7px";
         editBtn.style.position = "absolute";
         editBtn.style.bottom = "10px";
         editBtn.style.left = "10px";
         editBtn.addEventListener("click", editFnc);
         cell7.appendChild(editBtn);
-        
+
         let editIcon = document.createElement("i");
         editIcon.classList.add("fa-solid", "fa-pencil");
         editBtn.appendChild(editIcon);
 
         let editId1 = document.createElement("span");
-        editId1.classList.add("d-none","id");
+        editId1.classList.add("d-none", "id");
         editId1.innerText = element._id;
         editIcon.appendChild(editId1);
 
-        let editId2 = document.createElement("span");
-        editId2.classList.add("d-none","id");
-        editId2.innerText = element._id;
-        editBtn.appendChild(editId2);
-
         let deleteBtn = document.createElement("button");
-        deleteBtn.style.backgroundColor ="#FF4C4C";
-        deleteBtn.style.marginLeft ="4px";
-        deleteBtn.style.borderRadius ="7px";
+        deleteBtn.type = "button";
+        deleteBtn.classList.add("d-flex", "justify-content-center", "align-items-center");
+        deleteBtn.style.width = "30px";
+        deleteBtn.style.height = "30px";
+        deleteBtn.style.backgroundColor = "#FF4C4C";
+        deleteBtn.style.color = "black";
+        deleteBtn.style.textDecoration = "none";
+        deleteBtn.style.marginLeft = "4px";
+        deleteBtn.style.borderRadius = "7px";
         deleteBtn.style.position = "absolute";
         deleteBtn.style.bottom = "10px";
         deleteBtn.style.left = "45px";
-        deleteBtn.addEventListener("click", deleteFnc);
+        deleteBtn.addEventListener("click", popUpDelete);
         cell7.appendChild(deleteBtn);
 
         let deleteIcon = document.createElement("i");
@@ -172,34 +236,34 @@ const getOnPage = (obj) => {
         deleteBtn.appendChild(deleteIcon);
 
         let deleteId1 = document.createElement("span");
-        deleteId1.classList.add("d-none","id");
+        deleteId1.classList.add("d-none", "id");
         deleteId1.innerText = element._id;
         deleteIcon.appendChild(deleteId1);
 
         let deleteId2 = document.createElement("span");
-        deleteId2.classList.add("d-none","id");
+        deleteId2.classList.add("d-none", "id");
         deleteId2.innerText = element._id;
         deleteBtn.appendChild(deleteId2);
         count++
     });
 }
 
-const searchFnc = async (event)=>{
+const searchFnc = async (event) => {
     let typeSearch = searchParam.value;
     let inputSearch = event.target.value.toLowerCase();
     let array;
-    
-    try{
+
+    try {
         let response = await fetch(`https://striveschool-api.herokuapp.com/api/product/`,
-        {headers:{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA"}});
+            { headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQzZjY1NDI0ZjYwNTAwMTkzN2Q1MTgiLCJpYXQiOjE3MDgzODk5NzIsImV4cCI6MTcwOTU5OTU3Mn0.IsnDE36UsqkUR2qQSlRZWHXIK91CriRuKlIuMmMsqtA" } });
         let json = await response.json();
-    }catch{
+    } catch {
         console.log(error);
     }
 
-    switch(typeSearch){
+    switch (typeSearch) {
         case typeSearch = "brand":
-            array = json.filter((element)=>{
+            array = json.filter((element) => {
                 return element.brand.toLowerCase().includes(inputSearch);
             });
             node.innerHTML = "";
@@ -207,14 +271,14 @@ const searchFnc = async (event)=>{
             break
 
         case typeSearch = "description":
-            array = json.filter((element)=>{
+            array = json.filter((element) => {
                 return element.description.toLowerCase().includes(inputSearch);
             });
             node.innerHTML = "";
             getOnPage(array)
             break
         case typeSearch = "name":
-            array = json.filter((element)=>{
+            array = json.filter((element) => {
                 return element.name.toLowerCase().includes(inputSearch);
             });
             node.innerHTML = "";
@@ -225,5 +289,6 @@ const searchFnc = async (event)=>{
 
 
 searchBar.addEventListener("keyup", searchFnc);
+submitBtn.addEventListener("click", logFnc);
 
 fetchFnc();
