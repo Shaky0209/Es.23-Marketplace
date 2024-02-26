@@ -20,7 +20,7 @@ const getOnPage = (json) =>{
 }
 
 const elementsMap = (obj) => {
-    return output = obj.map((element) => {
+    return output = obj.map(({brand, imageUrl, name, price, _id}) => {
         let side = document.createElement("div");
         side.classList.add("col-sm-6", "col-md-4", "col-lg-3", "wh-100");
         side.style.padding = "10px";
@@ -35,7 +35,7 @@ const elementsMap = (obj) => {
         side.appendChild(sideContent)
 
         let img = document.createElement("img");
-        img.src = element.imageUrl;
+        img.src = imageUrl;
         img.style.width = "100%";
         img.style.borderRadius = "10px 10px 0px 0px";
         sideContent.appendChild(img);
@@ -52,9 +52,9 @@ const elementsMap = (obj) => {
         brandLabel.innerText = `Brand: `;
         brandContent.appendChild(brandLabel);
 
-        let brand = document.createElement("span");
-        brand.innerText = element.brand;
-        brandContent.appendChild(brand);
+        let isBrand = document.createElement("span");
+        isBrand.innerText = brand;
+        brandContent.appendChild(isBrand);
 
         let nameContent = document.createElement("div");
         detailsContent.appendChild(nameContent);
@@ -64,9 +64,9 @@ const elementsMap = (obj) => {
         nameLabel.innerText = `Model: `;
         nameContent.appendChild(nameLabel);
 
-        let name = document.createElement("span");
-        name.innerText = element.name;
-        nameContent.appendChild(name);
+        let isName = document.createElement("span");
+        isName.innerText = name;
+        nameContent.appendChild(isName);
 
         let priceContent = document.createElement("div");
         detailsContent.appendChild(priceContent);
@@ -76,9 +76,9 @@ const elementsMap = (obj) => {
         priceLabel.innerText = `Price: `;
         priceContent.appendChild(priceLabel);
 
-        let price = document.createElement("span");
-        price.innerText = `$ ${element.price}`;
-        priceContent.appendChild(price);
+        let isPrice = document.createElement("span");
+        isPrice.innerText = `$ ${price}`;
+        priceContent.appendChild(isPrice);
 
         let btnContainer = document.createElement("div");
         btnContainer.classList.add("p-2");
@@ -88,21 +88,16 @@ const elementsMap = (obj) => {
         detailsBtn.type = "button";
         detailsBtn.classList.add("btn", "btn-secondary");
         detailsBtn.innerText = "Details";
-        detailsBtn.addEventListener("click", detailsFnc);
+        detailsBtn.addEventListener("click", ()=>{detailsFnc(_id)});
         btnContainer.appendChild(detailsBtn);
-
-        let idDetails = document.createElement("span");
-        idDetails.classList.add("id", "d-none");
-        idDetails.innerText = element._id;
-        detailsBtn.appendChild(idDetails);
-
+        
         return side;
     });
 }
 
-const detailsFnc = (event) => {
+const detailsFnc = (_id) => {
     let url = "details.html";
-    let objId = event.target.querySelector(".id").innerText;
+    let objId = _id;
     window.location.href = `${url}?id=${objId}`;
 }
 

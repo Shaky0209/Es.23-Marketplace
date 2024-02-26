@@ -22,43 +22,42 @@ const backgroundRed = () => {
 }
 
 const applyObj = () => {
-
     let closeBtn = document.querySelector(".closeBtn");
     closeBtn.addEventListener("click", () => { msgDisp.classList.add("d-none"); });
 
-    if (!(brand.value.length > 1)) {
+    if (!(isBrand.value.length > 1)) {
         msg.innerText = 'Fill in the "brand" field with at least 2 characters';
         autClose();
-    } else if (!(description.value.length > 5)) {
+    } else if (!(isDescription.value.length > 5)) {
         msg.innerText = 'Fill in the "description" field with at least 6 characters';
 
         autClose();
     } else if (!(image.value.includes("https://") && image.value.includes("."))) {
         msg.innerText = 'The "image URL" field must respect the URL format';
         autClose()
-    } else if (!(nameObj.value.length > 1)) {
+    } else if (!(isName.value.length > 1)) {
         msg.innerText = 'Fill in the "Object Name" field with at least 2 characters';
         autClose();
 
-    } else if (!(!(price.value == 0) && !((price.value / 2) === NaN) && !(price.value === ""))) {
+    } else if (!(!(isPrice.value == 0) && !((isPrice.value / 2) === NaN) && !(isPrice.value === ""))) {
         msg.innerText = 'The "price" field must respect the valid numeric format ';
         msgDisp.classList.remove("d-none");
         autClose();
     } else {
         let newObj = {
-            brand: `${brand.value}`,
-            description: `${description.value}`,
+            brand: `${isBrand.value}`,
+            description: `${isDescription.value}`,
             imageUrl: `${image.value}`,
-            name: `${nameObj.value}`,
-            price: `${price.value}`,
+            name: `${isName.value}`,
+            price: `${isPrice.value}`,
         }
 
         if (act === send) {
-            brand.value = "";
-            description.value = "";
+            isBrand.value = "";
+            isDescription.value = "";
             image.value = "";
-            nameObj.value = "";
-            price.value = "";
+            isName.value = "";
+            isPrice.value = "";
             sendFetch(newObj);
         } else if (act === edit) {
             editFetch(newObj);
@@ -110,7 +109,7 @@ const editFetch = async (obj) => {
         if (response.status === 200) {
             correctlyFnc();
         } else {
-            alert("The edit operation does'nt succesfull! Read code's error on console.");
+            alert("The edit operation does'nt succesfull! Read error's code on console.");
         }
     } catch (error) {
         console.log(error);
@@ -196,11 +195,11 @@ const inputValue = async (id) => {
             });
         json = await response.json();
 
-        brand.value = json.brand;
-        description.value = json.description;
+        isBrand.value = json.brand;
+        isDescription.value = json.description;
         image.value = json.imageUrl;
-        nameObj.value = json.name;
-        price.value = json.price;
+        isName.value = json.name;
+        isPrice.value = json.price;
     } catch (error) {
         console.log(error);
     }
@@ -211,8 +210,8 @@ if (act === "edit%product") {
 }
 
 formBuild();
-const brand = document.querySelector(".brand");
-const description = document.querySelector(".description");
+const isBrand = document.querySelector(".brand");
+const isDescription = document.querySelector(".description");
 const image = document.querySelector(".img");
-const nameObj = document.querySelector(".name");
-const price = document.querySelector(".price");
+const isName = document.querySelector(".name");
+const isPrice = document.querySelector(".price");

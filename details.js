@@ -1,8 +1,8 @@
 const img = document.querySelector(".img");
-const brand = document.querySelector(".brand");
+const isBrand = document.querySelector(".brand");
 const model = document.querySelector(".model");
-const description = document.querySelector(".description");
-const price = document.querySelector(".price");
+const isDescription = document.querySelector(".description");
+const isPrice = document.querySelector(".price");
 const objId = document.querySelector(".obj-id");
 const params = new URLSearchParams(location.search);
 const id = params.get("id");
@@ -15,16 +15,16 @@ const fetchFnc = async ()=>{
     }catch(error){
         console.log(error);
     }
-    getDetails();
+    getDetails(json);
 }
 
-const getDetails = ()=>{
-    img.src = json.imageUrl;
-    brand.innerText = json.brand;
-    model.innerText = json.name;
-    description.innerText = json.description;
-    price.innerText = `$ ${json.price}`;
-    objId.innerText = json._id;
+const getDetails = ({brand, name, description, price, imageUrl, _id})=>{
+    img.src = imageUrl;
+    isBrand.innerText = brand;
+    model.innerText = name;
+    isDescription.innerText = description;
+    isPrice.innerText = `$ ${price}`;
+    objId.innerText = _id;
 }
 
 fetchFnc();
